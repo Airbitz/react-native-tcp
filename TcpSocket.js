@@ -65,9 +65,9 @@ util.inherits(TcpSocket, stream.Duplex);
 
 TcpSocket.prototype._debug = function () {
   if (__DEV__) {
-    var args = [].slice.call(arguments);
-    args.unshift('socket-' + this._id);
-    console.log.apply(console, args);
+    // var args = [].slice.call(arguments);
+    // args.unshift('socket-' + this._id);
+    // console.log.apply(console, args);
   }
 };
 
