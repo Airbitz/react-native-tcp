@@ -131,16 +131,19 @@ public final class TcpSocketManager {
         mServer.connectSocket(socketAddress, new ConnectCallback() {
             @Override
             public void onConnectCompleted(Exception ex, AsyncSocket socket) {
-              TcpSocketListener listener = mListener.get();
+                TcpSocketListener listener = mListener.get();
+                mClients.put(cId, socket);
                 if (ex == null) {
-                    mClients.put(cId, socket);
                     setSocketCallbacks(cId, socket);
 
                     if (listener != null) {
                         listener.onConnect(cId, socketAddress);
                     }
                 } else if (listener != null) {
-                   listener.onError(cId, ex.getMessage());
+                    listener.onError(cId, ex.getMessage());
+                    close(cId);
+                } else {
+                    close(cId);
                 }
             }
         });

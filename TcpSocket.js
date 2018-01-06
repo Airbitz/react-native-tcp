@@ -374,13 +374,14 @@ TcpSocket.prototype._write = function (
 ): boolean {
   var self = this;
 
+  callback = callback || noop;
   if (this._state === STATE.DISCONNECTED) {
-    throw new Error('Socket is not connected.');
+    // throw new Error('Socket is not connected.');
+    callback();
   } else if (this._state === STATE.CONNECTING) {
     // we're ok, GCDAsyncSocket handles queueing internally
   }
 
-  callback = callback || noop;
   var str;
   if (typeof buffer === 'string') {
     self._debug('socket.WRITE(): encoding as base64');
