@@ -10,13 +10,17 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
-    compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : 24
-    buildToolsVersion project.hasProperty('buildToolsVersion') ? project.buildToolsVersion : '23.0.3'
+    compileSdkVersion safeExtGet('compileSdkVersion', 24)
+    buildToolsVersion safeExtGet('buildToolsVersion', '23.0.3')
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion safeExtGet('minSdkVersion', 16)
+        targetSdkVersion safeExtGet('targetSdkVersion', 23)
         versionCode 1
         versionName "0.2.0"
     }
@@ -40,6 +44,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile 'com.koushikdutta.async:androidasync:2.1.6'
+    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.koushikdutta.async:androidasync:2.1.6'
 }
