@@ -16,8 +16,10 @@ var stream = require('stream-browserify');
 // var EventEmitter = require('events').EventEmitter;
 var ipRegex = require('ip-regex');
 var {
+  DeviceEventEmitter,
   NativeEventEmitter,
-  NativeModules
+  NativeModules,
+  Platform
 } = require('react-native');
 var Sockets = NativeModules.TcpSockets;
 var base64 = require('base64-js');
@@ -254,32 +256,34 @@ TcpSocket.prototype._registerEvents = function(): void {
     return;
   }
 
+  const emitter = Platform.OS === 'android' ? DeviceEventEmitter : this._eventEmitter
+
   this._subs = [
-    this._eventEmitter.addListener('connect', ev => {
+    emitter.addListener('connect', ev => {
       if (this._id !== ev.id) {
         return;
       }
       this._onConnect(ev.address);
     }),
-    this._eventEmitter.addListener('connection', ev => {
+    emitter.addListener('connection', ev => {
       if (this._id !== ev.id) {
         return;
       }
       this._onConnection(ev.info);
     }),
-    this._eventEmitter.addListener('data', ev => {
+    emitter.addListener('data', ev => {
       if (this._id !== ev.id) {
         return;
       }
       this._onData(ev.data);
     }),
-    this._eventEmitter.addListener('close', ev => {
+    emitter.addListener('close', ev => {
       if (this._id !== ev.id) {
         return;
       }
       this._onClose(ev.hadError);
     }),
-    this._eventEmitter.addListener('error', ev => {
+    emitter.addListener('error', ev => {
       if (this._id !== ev.id) {
         return;
       }
